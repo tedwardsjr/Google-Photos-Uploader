@@ -10,6 +10,7 @@ This project is based on [google_photos_mobile_client](https://github.com/xob0t/
 - 🔁 Automatically skips already uploaded files  
 - 📁 Works with local folders and SMB/NAS mounts  
 - 🎞 Supports photos plus `.mp4` and `.mov` videos  
+- 📊 Logs upload size, percentage, and speed while files upload  
 - 🐳 Runs inside a minimal Docker container  
 
 ---
@@ -35,6 +36,7 @@ services:
     environment:
       - WATCHED_FOLDER=/data
       - AUTH_DATA=INSERT_YOUR_AUTH_DATA_HERE
+      - UPLOAD_STATUS_INTERVAL=3
     volumes:
       - INSERT_YOUR_PHOTO_FOLDER_HERE:/data
 ```
