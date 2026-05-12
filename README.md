@@ -9,6 +9,7 @@ This project is based on [google_photos_mobile_client](https://github.com/xob0t/
 - ✅ Unlimited uploads in original quality  
 - 🔁 Automatically skips already uploaded files  
 - 📁 Works with local folders and SMB/NAS mounts  
+- 🎞 Supports photos plus `.mp4` and `.mov` videos  
 - 🐳 Runs inside a minimal Docker container  
 
 ---
