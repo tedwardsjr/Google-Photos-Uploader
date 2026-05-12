@@ -28,6 +28,13 @@ def format_size(size_bytes):
     return f"{size_mb:.1f} MB"
 
 
+def live_photo_key(file_path):
+    stem = Path(file_path).stem.lower()
+    if stem.endswith("_hevc"):
+        stem = stem[:-5]
+    return stem
+
+
 def build_motion_photo_xmp(filename, video_size, video_mime):
     safe_filename = escape(filename, quote=True)
     return f'''<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Google Photos Uploader">
@@ -260,13 +267,13 @@ class PhotoHandler(FileSystemEventHandler):
         return None
 
     def find_companion(self, file_path, companion_extensions):
-        target_stem = file_path.stem.lower()
+        target_key = live_photo_key(file_path)
         companion_extensions = {extension.lower() for extension in companion_extensions}
         try:
             for candidate in file_path.parent.iterdir():
                 if candidate == file_path or not candidate.is_file():
                     continue
-                if candidate.stem.lower() == target_stem and candidate.suffix.lower() in companion_extensions:
+                if live_photo_key(candidate) == target_key and candidate.suffix.lower() in companion_extensions:
                     return candidate
         except FileNotFoundError:
             return None

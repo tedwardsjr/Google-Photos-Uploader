@@ -50,7 +50,7 @@ Replace `INSERT_YOUR_AUTH_DATA_HERE` with your real authentication string, and m
 
 ## 📱 iPhone Live Photos
 
-When a matching still and video share the same filename stem, such as `IMG_1234.HEIC` and `IMG_1234.MOV`, the uploader waits for both files, converts them into a temporary Google Motion Photo JPEG, uploads that single Motion Photo, and removes the original pair after upload succeeds.
+When a matching still and video share the same filename stem, such as `IMG_1234.HEIC` and `IMG_1234.MOV`, the uploader waits for both files, converts them into a temporary Google Motion Photo JPEG, uploads that single Motion Photo, and removes the original pair after upload succeeds. iPhone video names ending in `_HEVC`, such as `IMG_1234_HEVC.MOV`, are paired with the matching still automatically.
 
 - `LIVE_PHOTO_PAIR_WAIT` controls how long the uploader waits for the matching file before uploading the first file by itself.
 - `FILE_STABLE_SECONDS` controls how long file size must stop changing before upload or conversion starts.
