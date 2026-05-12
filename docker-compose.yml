@@ -7,6 +7,8 @@ services:
       - WATCHED_FOLDER=/data
       - AUTH_DATA=INSERT_YOUR_AUTH_DATA_HERE
       - UPLOAD_STATUS_INTERVAL=3
+      - LIVE_PHOTO_PAIR_WAIT=30
+      - FILE_STABLE_SECONDS=2
     volumes:
       - INSERT_YOUR_PHOTO_FOLDER_HERE:/data
     # If necessary, specify the UID/GID of the user for file permissions

@@ -10,6 +10,7 @@ This project is based on [google_photos_mobile_client](https://github.com/xob0t/
 - 🔁 Automatically skips already uploaded files  
 - 📁 Works with local folders and SMB/NAS mounts  
 - 🎞 Supports photos plus `.mp4` and `.mov` videos  
+- 📱 Converts iPhone Live Photo `.heic`/`.jpg` + `.mov` pairs into Google Motion Photos  
 - 📊 Logs upload size, percentage, and speed while files upload  
 - 🐳 Runs inside a minimal Docker container  
 
@@ -37,11 +38,22 @@ services:
       - WATCHED_FOLDER=/data
       - AUTH_DATA=INSERT_YOUR_AUTH_DATA_HERE
       - UPLOAD_STATUS_INTERVAL=3
+      - LIVE_PHOTO_PAIR_WAIT=30
+      - FILE_STABLE_SECONDS=2
     volumes:
       - INSERT_YOUR_PHOTO_FOLDER_HERE:/data
 ```
 
 Replace `INSERT_YOUR_AUTH_DATA_HERE` with your real authentication string, and map your photo folder accordingly.
+
+---
+
+## 📱 iPhone Live Photos
+
+When a matching still and video share the same filename stem, such as `IMG_1234.HEIC` and `IMG_1234.MOV`, the uploader waits for both files, converts them into a temporary Google Motion Photo JPEG, uploads that single Motion Photo, and removes the original pair after upload succeeds.
+
+- `LIVE_PHOTO_PAIR_WAIT` controls how long the uploader waits for the matching file before uploading the first file by itself.
+- `FILE_STABLE_SECONDS` controls how long file size must stop changing before upload or conversion starts.
 
 ---
 
