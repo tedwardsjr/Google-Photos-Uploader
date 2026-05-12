@@ -206,24 +206,27 @@ class PhotoHandler(FileSystemEventHandler):
             threading.Thread(target=self.process_path, args=(Path(event.src_path),), daemon=True).start()
 
     def process_path(self, file_path):
-        file_path = Path(file_path)
-        if not self.wait_for_stable_file(file_path):
-            return
+        try:
+            file_path = Path(file_path)
+            if not self.wait_for_stable_file(file_path):
+                return
 
-        if file_path.suffix.lower() in LIVE_PHOTO_STILL_EXTENSIONS:
-            video_path = self.wait_for_companion(file_path, VIDEO_EXTENSIONS)
-            if video_path:
-                self.upload_live_photo_pair(file_path, video_path)
+            if file_path.suffix.lower() in LIVE_PHOTO_STILL_EXTENSIONS:
+                video_path = self.wait_for_companion(file_path, VIDEO_EXTENSIONS)
+                if video_path:
+                    self.upload_live_photo_pair(file_path, video_path)
+                elif file_path.exists():
+                    self.upload_single_file(file_path)
+            elif file_path.suffix.lower() in VIDEO_EXTENSIONS:
+                still_path = self.wait_for_companion(file_path, LIVE_PHOTO_STILL_EXTENSIONS)
+                if still_path:
+                    self.upload_live_photo_pair(still_path, file_path)
+                elif file_path.exists():
+                    self.upload_single_file(file_path)
             else:
                 self.upload_single_file(file_path)
-        elif file_path.suffix.lower() in VIDEO_EXTENSIONS:
-            still_path = self.wait_for_companion(file_path, LIVE_PHOTO_STILL_EXTENSIONS)
-            if still_path:
-                self.upload_live_photo_pair(still_path, file_path)
-            else:
-                self.upload_single_file(file_path)
-        else:
-            self.upload_single_file(file_path)
+        except Exception as e:
+            print(f"Error processing {file_path}: {e}", flush=True)
 
     def wait_for_stable_file(self, file_path):
         last_size = -1
@@ -248,6 +251,8 @@ class PhotoHandler(FileSystemEventHandler):
     def wait_for_companion(self, file_path, companion_extensions):
         deadline = time.monotonic() + LIVE_PHOTO_PAIR_WAIT
         while time.monotonic() < deadline:
+            if not file_path.exists():
+                return None
             companion = self.find_companion(file_path, companion_extensions)
             if companion and self.wait_for_stable_file(companion):
                 return companion
@@ -257,11 +262,14 @@ class PhotoHandler(FileSystemEventHandler):
     def find_companion(self, file_path, companion_extensions):
         target_stem = file_path.stem.lower()
         companion_extensions = {extension.lower() for extension in companion_extensions}
-        for candidate in file_path.parent.iterdir():
-            if candidate == file_path or not candidate.is_file():
-                continue
-            if candidate.stem.lower() == target_stem and candidate.suffix.lower() in companion_extensions:
-                return candidate
+        try:
+            for candidate in file_path.parent.iterdir():
+                if candidate == file_path or not candidate.is_file():
+                    continue
+                if candidate.stem.lower() == target_stem and candidate.suffix.lower() in companion_extensions:
+                    return candidate
+        except FileNotFoundError:
+            return None
         return None
 
     def mark_processing(self, *paths):
