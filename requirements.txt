@@ -1,7 +1,7 @@
 bbpb==1.4.2
 certifi==2025.4.26
 charset-normalizer==3.4.2
-gpmc @ https://github.com/xob0t/google_photos_mobile_client/archive/refs/heads/main.zip#sha256=34c6ae6f0544df5d70fb0c72d6a137545d6e183d422e6c3ed06379ef4754e6ca
+gpmc @ https://github.com/xob0t/google_photos_mobile_client/archive/7ab9eeb87a8dd8e5ac0c4740e42e4a2bd72e0b87.zip#sha256=0f18c77286d4dedc1fb6b6dc03b61d24791830ac3e04ba9bccb26be7aaf838b4
 idna==3.10
 markdown-it-py==3.0.0
 mdurl==0.1.2
