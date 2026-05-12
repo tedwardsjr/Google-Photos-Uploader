@@ -29,7 +29,7 @@ Here's a sample `docker-compose.yml` configuration:
 ```yaml
 services:
   gphotos-uploader:
-    image: ciuse99/gphotos-uploader:latest
+    image: tedwardsjr/google-photos-uploader:latest
     container_name: gphotos-uploader
     restart: unless-stopped
     environment:
